@@ -1,13 +1,13 @@
 class Deposito{
 	
 	var property formaciones = []
-	var property locomotoras = []
+	var property locomotorasSueltas = []
 	const limiteUnidades = 20
 	const limiteDePeso = 10000
 	
 	method agregarFormacion(formacion) = formaciones.add(formacion)
 	
-	method agregarLocomotoraSuelta(locomotora) = locomotoras.add(locomotora)
+	method agregarLocomotoraSuelta(locomotora) = locomotorasSueltas.add(locomotora)
 	
 	method vagonesPesadosXformacion(){
 		return formaciones.map{formacion => formacion.vagonPesadoXformacion()}
@@ -20,9 +20,14 @@ class Deposito{
 	}
 	method necesitaConductorExperimentado(){
 		 return (self.formacionComplejaExtendida() or self.formacionComplejaPesada())
-		 
 	}
-	
+	method locomotoraCandidata(formacion){
+		return locomotorasSueltas.find{locomotora => locomotora.arrastreUtil() >= formacion.cuantoEmpujeFalta()}
+	}
+	method agregarLocomotoraParaMoverFormacion(formacion){
+		if (not formacion.formacionPuedeMoverse())
+		formacion.locomotoras().add(self.locomotoraCandidata(formacion))
+	}
 	
 }
 
