@@ -92,7 +92,7 @@ test "Si la formacion es compleja, se necesita un conductor experimentado"{
 	formacion1.agregarLocomotora(locom2)
 	const depo1 = new Deposito()
 	depo1.agregarFormacion(formacion1)
-	assert.that(depo1.necesitaConductorExperimentado())
+	assert.that(depo1.necesitaConductorExperimentado(formacion1))
 }
 test "Si la formacion no se mueve, le añadimos una locomotora suelta del deposito para que pueda mover la formacion"{
 	const vagon1 = new VagonDeCarga()

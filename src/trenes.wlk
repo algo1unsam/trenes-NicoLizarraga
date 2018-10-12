@@ -2,8 +2,7 @@ class Deposito{
 	
 	var property formaciones = []
 	var property locomotorasSueltas = []
-	const limiteUnidades = 20
-	const limiteDePeso = 10000
+
 	
 	method agregarFormacion(formacion) = formaciones.add(formacion)
 	
@@ -12,14 +11,8 @@ class Deposito{
 	method vagonesPesadosXformacion(){
 		return formaciones.map{formacion => formacion.vagonPesadoXformacion()}
 	}
-	method formacionComplejaExtendida(){
-		return formaciones.any{formacion => formacion.unidadesXformacion()} >= limiteUnidades
-	}
-	method formacionComplejaPesada(){
-		return formaciones.any{formacion => formacion.pesoTotalFormacion()} >= limiteDePeso
-	}
-	method necesitaConductorExperimentado(){
-		 return (self.formacionComplejaExtendida() or self.formacionComplejaPesada())
+	method necesitaConductorExperimentado(formacion){
+		 return formacion.formacionCompleja() 
 	}
 	method locomotoraCandidata(formacion){
 		return locomotorasSueltas.find{locomotora => locomotora.arrastreUtil() >= formacion.cuantoEmpujeFalta()}
@@ -35,6 +28,8 @@ class Formacion{
 	
 	var property vagonesUtilizados = []
 	var property locomotoras = []
+	const limiteUnidades = 20
+	const limitePeso = 10000
 	
 	method agregarVagon(vagon) = vagonesUtilizados.add(vagon)
 	
@@ -67,8 +62,21 @@ class Formacion{
 	method pesoTotalFormacion(){
 		return vagonesUtilizados.sum{vagones => vagones.peso()} + locomotoras.sum{locomotora => locomotora.peso()}
 	}
+	method formacionCompleja(){
+	return (self.unidadesXformacion() >= limiteUnidades) or (self.pesoTotalFormacion() >= limitePeso)
+	}
 	
 	}
+	
+class FormacionCortaDistancia inherits Formacion{
+	method formacionBienArmada(formacion){
+		return (not formacion.formacionCompleja()) and (formacion.formacionPuedeMoverse())
+	}
+	
+}
+class FormacionLargaDistancia inherits Formacion{
+	
+}
 
 class Locomotora{
 	var property peso = null
