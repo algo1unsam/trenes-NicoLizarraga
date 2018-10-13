@@ -112,6 +112,56 @@ test "Si la formacion no se mueve, le añadimos una locomotora suelta del deposi
 	const depo1 = new Deposito()
 	depo1.agregarLocomotoraSuelta(locom2)
 	depo1.agregarFormacion(formacion1)
-	assert.that(depo1.agregarLocomotoraParaMoverFormacion(formacion1))
+	assert.that(depo1.agregarLocomotoraParaMoverFormacion(formacion1))	
+}
+
+test "Si la formacion de corta distancia está bien armada"{
+	const vagon1 = new VagonDePasajeros()
+	vagon1.largoVagon(10)
+	vagon1.anchoVagon(3)
+	vagon1.cantidadBanios(2)
+	const locom1 = new Locomotora()
+	const locom2 = new Locomotora()
+	locom1.peso(3000)
+	locom1.pesoMaximoArrastre(10000)
+	locom2.peso(5000)
+	locom2.pesoMaximoArrastre(20000)
+	const formacion1 = new FormacionLargaDistancia()
+	formacion1.agregarVagon(vagon1)
+	formacion1.agregarLocomotora(locom1)
+	formacion1.agregarLocomotora(locom2)
+	assert.that(formacion1.formacionBienArmada(formacion1))	
+}
+test "Velocidad maxima de formacion corta Distancia"{
+	const vagon1 = new VagonDePasajeros()
+	vagon1.largoVagon(10)
+	vagon1.anchoVagon(3)
+	const locom1 = new Locomotora()
+	locom1.peso(3000)
+	locom1.pesoMaximoArrastre(10000)
+	locom1.velocMaxima(80)
+	const formacion1 = new FormacionCortaDistancia()
+	formacion1.agregarVagon(vagon1)
+	formacion1.agregarLocomotora(locom1)
+	assert.equals(60, formacion1.nuevaVelocidad())	
 	
+}
+
+test "Velocidad maxima de formacion larga Distancia"{
+	const vagon1 = new VagonDePasajeros()
+	vagon1.largoVagon(10)
+	vagon1.anchoVagon(3)
+	const locom1 = new Locomotora()
+	locom1.peso(3000)
+	locom1.pesoMaximoArrastre(10000)
+	locom1.velocMaxima(250)
+	const formacion1 = new FormacionLargaDistancia()
+	formacion1.poblacionDeCiudad(150000)
+	formacion1.agregarVagon(vagon1)
+	formacion1.agregarLocomotora(locom1)
+	assert.equals(200, formacion1.nuevaVelocidad())	
+
+
+
+
 }

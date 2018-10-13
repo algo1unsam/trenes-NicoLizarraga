@@ -65,17 +65,37 @@ class Formacion{
 	method formacionCompleja(){
 	return (self.unidadesXformacion() >= limiteUnidades) or (self.pesoTotalFormacion() >= limitePeso)
 	}
+	method cuantosBaniosTiene(){
+		return vagonesUtilizados.sum{vagones => vagones.cantidadBanios() * 50}	>= vagonesUtilizados.sum{vagones => vagones.capacidad()}
+	}
 	
 	}
 	
 class FormacionCortaDistancia inherits Formacion{
+	 const velocidadLimite= 60
 	method formacionBienArmada(formacion){
 		return (not formacion.formacionCompleja()) and (formacion.formacionPuedeMoverse())
+	}
+	method nuevaVelocidad(){
+		return [self.velocidadMaximaDeFormacion(), velocidadLimite].min()
 	}
 	
 }
 class FormacionLargaDistancia inherits Formacion{
+	const city = 100000
+	var property poblacionDeCiudad = null
+	const velocidadLimiteBigCity = 200
+	const velocidadLimiteSmallCity = 150
 	
+	method formacionBienArmada(formacion){
+		return (formacion.formacionPuedeMoverse()) and (formacion.cuantosBaniosTiene())
+	}	
+	method nuevaVelocidad(){
+		if (city + poblacionDeCiudad >= 200000)
+		return [self.velocidadMaximaDeFormacion() , velocidadLimiteBigCity].min()
+		else
+		return [self.velocidadMaximaDeFormacion(), velocidadLimiteSmallCity].min()
+	}
 }
 
 class Locomotora{
@@ -90,6 +110,7 @@ class Locomotora{
 class VagonDePasajeros{
 	var property largoVagon = null
 	var property anchoVagon =null
+	var property cantidadBanios = null
 	const pesoDePasajero = 80
 	
 	method capacidad(){
@@ -105,6 +126,7 @@ class VagonDePasajeros{
 class VagonDeCarga{
 
 	var property cargaMaxima = null
+	var property cantidadBanios = 0
 	const pesoDeGuardas = 160
 	
 	method peso() = cargaMaxima + pesoDeGuardas
